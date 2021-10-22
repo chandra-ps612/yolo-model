@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import argparse
 
-'''This following object detection program will be workable for yolov3, yolov4 and yolov5. Before using it
+'''This following object detection code works smoothly with yolov3, yolov4 and yolov5. Before using it
 with different models and versions of yolo algorithm, some minor changes are required.'''
 
 parser = argparse.ArgumentParser()
