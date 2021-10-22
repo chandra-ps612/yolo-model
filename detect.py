@@ -8,7 +8,7 @@ with different models and versions of yolo algorithm, some minor changes are req
 parser = argparse.ArgumentParser()
 parser.add_argument('--webcam', help='True/False', default=False)
 parser.add_argument('--play_video', help='True/False', default=False)
-parser.add_argument('--image', help='True/False', default=True)
+parser.add_argument('--image', help='True/False', default=False)
 parser.add_argument('--video_path', help='Path of video file', default='Path of video file')
 parser.add_argument('--image_path', help='Path of image file', default='Path of image file')
 parser.add_argument('--verbose', help='To print statements', default=True)
@@ -19,13 +19,15 @@ weightsPath='Path of weights file'
 imagePath='Path of image file'
 videoPath='Path of video file'
 
-# Load yolov3 pre-trained model
-def load_yolov3():
+# Load yolo pre-trained model
+def load_yolo():
     net = cv2.dnn.readNet(configPath, weightsPath)
     # The list classes
-    classes=['Antelope', 'Pig', 'Elephant', 'Cattle', 'Goat']
+    classes=[]
+    with open('coco.names', 'r') as f:
+        classes= [line.strip() for line in f.readlines()]
     layer_names=net.getLayerNames() # Get layers of the network
-    # Determine the output layer names from the yolov3 pre-trained model
+    # Determine the output layer names from the yolo pre-trained model
     output_layers=[layer_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
     net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
@@ -88,7 +90,7 @@ def draw_labels(boxes, confs, class_ids, classes, imgr):
 
 
 def image_detection(imagePath):
-    net, classes, output_layers= load_yolov3()
+    net, classes, output_layers= load_yolo()
     imgr, height, width= load_image(imagePath)
     blob, outputs= detect_objects(imgr, net, output_layers)
     class_ids, confidences, boxes= get_box_dimensions(outputs, width, height)
@@ -99,7 +101,7 @@ def image_detection(imagePath):
             break
 
 def webcam_detection():
-    net, classes, output_layers= load_yolov3()
+    net, classes, output_layers= load_yolo()
     cap= start_webcam()
     while True:
         _, frame=cap.read()
@@ -113,7 +115,7 @@ def webcam_detection():
     cap.release()
 
 def video_detection(videoPath):
-    net, classes, output_layers= load_yolov3()
+    net, classes, output_layers= load_yolo()
     cap= start_video(videoPath)
     while True:
         _, frame=cap.read()
