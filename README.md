@@ -1,4 +1,5 @@
 # yolo-model
-Single object detection program using openCV to detect objects in three input sources viz. image, video and webcam.
-It works on yolov3, yolov4 and yolov5. Before implementing the codes with different versions and models of yolo algorithm, some minor changes are needed.
 
+object detection code using OpenCV to detect objects in three input sources viz. image, video, and webcam.
+It only works with yolov3, and yolov4. Please go through the requirements.txt for the smooth execution
+of this particular code. 
