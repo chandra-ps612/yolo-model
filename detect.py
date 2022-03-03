@@ -2,8 +2,7 @@ import cv2
 import numpy as np
 import argparse
 
-'''This following object detection code works smoothly with yolov3, yolov4 and yolov5. Before using it
-with different models and versions of yolo algorithm, some minor changes are required.'''
+'''This following object detection code works smoothly with yolov3, and yolov4.'''
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--webcam', help='True/False', default=False)
@@ -80,12 +79,16 @@ def get_box_dimensions(outputs, width, height): # Showing information on the scr
 def draw_labels(boxes, confs, class_ids, classes, imgr):
     # Using NMS function of openCV to perform non-maximum suppression 
     indices=cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.3)
+    colors = np.random.uniform(0, 255, size=(len(classes), 3))
     for i in range (len(boxes)):
         if i in indices:
             x, y, w, h=boxes[i]
-            cv2.rectangle(imgr, (x, y), (x+w, y+h), (0,255,0), thickness=1)
-            cv2.rectangle(imgr, (x,y), (x+w, y-25), (0,255,0), thickness=-1)
-            cv2.putText(imgr, f'{classes[class_ids[i]]}: {int(confs[i]*100)}%', (x, y-5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,0), 1)
+            conf=confs[i]
+            class_id=class_ids[i]
+            color = colors[class_ids[i]]
+            cv2.rectangle(imgr, (x, y), (x+w, y+h), color, thickness=1)
+            cv2.rectangle(imgr, (x,y), (x+w, y-25), color, thickness=-1)
+            cv2.putText(imgr, f'{classes[class_id]}: {int(conf*100)}%', (x, y-5), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,0), 1)
     cv2.imshow('output', imgr)
 
 
