@@ -125,6 +125,7 @@ def webcam_detection():
     cap.release()
 
 def video_detection(videoPath):
+    create=None
     net, classes, output_layers= load_yolo()
     cap= start_video(videoPath)
     while True:
