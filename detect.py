@@ -5,9 +5,9 @@ import argparse
 '''This following object detection code works smoothly with yolo darknet model.'''
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--webcam', help='True/False', default=True)
+parser.add_argument('--webcam', help='True/False', default=False)
 parser.add_argument('--video_feed', help='True/False', default=False)
-parser.add_argument('--image', help='True/False', default=False)
+parser.add_argument('--image', help='True/False', default=True)
 parser.add_argument('--video_path', help='Path of video file', default='C:\\Users\\lav singh\\workplace\\yolo\\test.mp4')
 parser.add_argument('--image_path', help='Path of image file', default='C:\\Users\\lav singh\\workplace\\yolo\\test.jpg')
 parser.add_argument('--verbose', help='To print statements', default=True)
@@ -99,8 +99,8 @@ def image_detection(imagePath):
     net, classes, output_layers= load_yolo()
     imgr, height, width= load_image(imagePath)
     blob, outputs= detect_objects(imgr, net, output_layers)
-    class_ids, confidences, boxes= get_box_dimensions(outputs, width, height)
-    draw_labels(boxes, confidences, class_ids, classes, imgr)
+    class_ids, confs, boxes= get_box_dimensions(outputs, width, height)
+    draw_labels(boxes, confs, class_ids, classes, imgr)
     cv2.imwrite(outputImagePath, imgr)
     while True:
         key=cv2.waitKey(1)
@@ -115,8 +115,8 @@ def webcam_detection():
         frame=cv2.resize(frame, (416, 416), fx=None, fy=None)
         height, width,_= frame.shape
         blob, outputs= detect_objects(frame, net, output_layers)
-        class_ids, confidences, boxes= get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confidences, class_ids, classes, frame)
+        class_ids, confs, boxes= get_box_dimensions(outputs, height, width)
+        draw_labels(boxes, confs, class_ids, classes, frame)
         key=cv2.waitKey(1)
         if key==ord('q'):
             break
@@ -131,8 +131,8 @@ def video_detection(videoPath):
         frame=cv2.resize(frame, (416, 416), fx=None, fy=None)
         height, width,_= frame.shape
         blob, outputs= detect_objects(frame, net, output_layers)
-        class_ids, confidences, boxes= get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confidences, class_ids, classes, frame)
+        class_ids, confs, boxes= get_box_dimensions(outputs, height, width)
+        draw_labels(boxes, confs, class_ids, classes, frame)
         if create is None:
             fourcc = cv2.VideoWriter_fourcc(*'MP4V')
             create = cv2.VideoWriter(output_videoPath, fourcc, 10, (1920, 1080), True)
