@@ -34,8 +34,6 @@ def load_yolo():
     layer_names=net.getLayerNames() # Get layers of the network
     # Determine the output layer names from the yolo pre-trained model
     output_layers=[layer_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
-    net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-    net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
     return net, classes, output_layers
 
 def load_image(imagePath):
